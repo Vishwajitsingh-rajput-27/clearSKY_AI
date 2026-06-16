@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 
 from sqlalchemy import Boolean, DateTime, Float, ForeignKey, JSON, String, Uuid, func
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.session import Base
 
@@ -40,3 +40,8 @@ class InferenceRun(Base):
     recommendations: Mapped[list | None] = mapped_column(JSON)
     metadata_json: Mapped[dict | None] = mapped_column(JSON)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    assets: Mapped[list["Asset"]] = relationship("Asset", back_populates="inference_run")
+    benchmark_results: Mapped[list["BenchmarkResult"]] = relationship(
+        "BenchmarkResult",
+        back_populates="inference_run",
+    )

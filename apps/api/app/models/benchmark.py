@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 
 from sqlalchemy import DateTime, Float, ForeignKey, JSON, String, Uuid, func
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.session import Base
 
@@ -34,3 +34,7 @@ class BenchmarkResult(Base):
     benchmark_rows: Mapped[list | None] = mapped_column(JSON)
     explanation: Mapped[dict | None] = mapped_column(JSON)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    inference_run: Mapped["InferenceRun"] = relationship(
+        "InferenceRun",
+        back_populates="benchmark_results",
+    )

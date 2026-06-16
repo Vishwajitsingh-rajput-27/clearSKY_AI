@@ -59,12 +59,11 @@ def persist_inference_result(
     db.flush()
 
     for product in result.products:
-        db.add(
+        inference_run.assets.append(
             Asset(
                 id=product.asset_id,
                 user_id=user.id if user else None,
                 project_id=project_id,
-                inference_run_id=result.run_id,
                 asset_type=product.asset_type,
                 storage_url=product.storage.storage_url,
                 local_path=product.storage.local_path,
@@ -77,9 +76,8 @@ def persist_inference_result(
             )
         )
 
-    db.add(
+    inference_run.benchmark_results.append(
         BenchmarkResult(
-            inference_run_id=result.run_id,
             metric_mode=result.evaluation_mode,
             requested_model=result.requested_model,
             used_model=result.used_model,

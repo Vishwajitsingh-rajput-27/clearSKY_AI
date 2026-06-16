@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 
 from sqlalchemy import BigInteger, DateTime, ForeignKey, String, Uuid, func
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.session import Base
 
@@ -33,3 +33,7 @@ class Asset(Base):
     mime_type: Mapped[str | None] = mapped_column(String(128))
     checksum: Mapped[str | None] = mapped_column(String(128))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    inference_run: Mapped["InferenceRun | None"] = relationship(
+        "InferenceRun",
+        back_populates="assets",
+    )
