@@ -56,6 +56,7 @@ def persist_inference_result(
         metadata_json=result.metadata,
     )
     db.add(inference_run)
+    db.flush()
 
     for product in result.products:
         db.add(
