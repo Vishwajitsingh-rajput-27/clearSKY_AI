@@ -3,7 +3,7 @@ services:
     name: clearsky-api
     runtime: docker
     rootDir: apps/api
-    plan: starter
+    plan: free
     healthCheckPath: /api/health
     envVars:
       - key: APP_ENV
@@ -52,51 +52,3 @@ services:
         value: "512"
       - key: MODEL_DIR
         value: /app/models
-
-  - type: worker
-    name: clearsky-worker
-    runtime: docker
-    rootDir: apps/api
-    plan: starter
-    dockerCommand: python -m app.worker
-    envVars:
-      - key: APP_ENV
-        value: production
-      - key: DATABASE_URL
-        sync: false
-      - key: FRONTEND_URL
-        sync: false
-      - key: BACKEND_URL
-        sync: false
-      - key: ALLOWED_ORIGINS
-        sync: false
-      - key: STORAGE_PROVIDER
-        sync: false
-      - key: CLOUDINARY_URL
-        sync: false
-      - key: SUPABASE_URL
-        sync: false
-      - key: SUPABASE_SERVICE_ROLE_KEY
-        sync: false
-      - key: SUPABASE_STORAGE_BUCKET
-        value: clearsky
-      - key: API_INTERNAL_TOKEN
-        sync: false
-      - key: JWT_SECRET
-        generateValue: true
-      - key: ACCESS_TOKEN_EXPIRE_MINUTES
-        value: "1440"
-      - key: DEFAULT_USER_STORAGE_QUOTA_MB
-        value: "512"
-      - key: MODEL_DIR
-        value: /app/models
-      - key: MAX_UPLOAD_SIZE_MB
-        value: "512"
-      - key: INFERENCE_DIR
-        value: /app/inference
-      - key: ALLOWED_INFERENCE_EXTENSIONS
-        value: ".png,.jpg,.jpeg,.tif,.tiff,.jp2,.j2k"
-      - key: MAX_INFERENCE_DIMENSION
-        value: "2048"
-      - key: MAX_INFERENCE_PIXELS
-        value: "25000000"
