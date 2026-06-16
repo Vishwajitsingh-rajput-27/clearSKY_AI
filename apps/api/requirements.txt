@@ -1,0 +1,4 @@
+-r requirements-core.txt
+GDAL==3.6.2
+rasterio==1.4.3
+torch==2.5.1

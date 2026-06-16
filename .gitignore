@@ -1,0 +1,47 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+.local/
+dist/
+build/
+*.egg-info/
+
+# Node
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Coverage and reports
+coverage/
+.coverage
+htmlcov/
+
+# Local data and model artifacts
+data/
+models/
+outputs/
+uploads/
+*.tif
+*.tiff
+*.vrt
+*.aux.xml

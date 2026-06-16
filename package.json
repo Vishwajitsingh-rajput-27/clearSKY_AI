@@ -1,0 +1,19 @@
+{
+  "name": "clearsky-ai",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Monorepo foundation for clearSKY AI, a LISS-IV cloud removal and reconstruction platform.",
+  "workspaces": [
+    "apps/web"
+  ],
+  "scripts": {
+    "dev:web": "npm --workspace @clearsky/web run dev",
+    "build:web": "npm --workspace @clearsky/web run build",
+    "lint:web": "npm --workspace @clearsky/web run lint",
+    "typecheck:web": "npm --workspace @clearsky/web run typecheck"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  }
+}
