@@ -37,10 +37,10 @@ coverage/
 htmlcov/
 
 # Local data and model artifacts
-data/
-models/
-outputs/
-uploads/
+/data/
+/models/
+/outputs/
+/uploads/
 *.tif
 *.tiff
 *.vrt
