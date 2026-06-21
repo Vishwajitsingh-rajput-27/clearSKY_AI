@@ -9,7 +9,7 @@ from torch import nn
 from torch.utils.data import DataLoader
 
 from app.ai.datasets.liss4 import LISS4CloudRemovalDataset, collate_liss4_batch
-from app.ai.metrics.losses import ReconstructionLoss
+from app.ai.metrics.losses import CloudSegmentationLoss, ReconstructionLoss
 from app.ai.metrics.quality import reconstruction_metrics
 from app.ai.models.fusion import MultiSensorFusionNetwork
 from app.ai.models.registry import build_model, normalize_model_name
@@ -30,12 +30,7 @@ def train_from_config(config: TrainingConfig) -> dict[str, float]:
         base_channels=config.base_channels,
     ).to(device)
     optimizer = torch.optim.AdamW(model.parameters(), lr=config.learning_rate, weight_decay=1e-4)
-    criterion = ReconstructionLoss(
-        l1_weight=config.loss_weights.l1,
-        spectral_weight=config.loss_weights.spectral,
-        edge_weight=config.loss_weights.edge,
-        ssim_weight=config.loss_weights.ssim,
-    )
+    criterion = build_criterion(config)
 
     best_val_loss = float("inf")
     latest_metrics: dict[str, float] = {}
@@ -164,6 +159,18 @@ def build_loader(
         num_workers=config.num_workers,
         pin_memory=config.device.startswith("cuda"),
         collate_fn=collate_liss4_batch,
+    )
+
+
+def build_criterion(config: TrainingConfig) -> nn.Module:
+    if normalize_model_name(config.model_name) == "unet-cloud-segmentation":
+        return CloudSegmentationLoss()
+
+    return ReconstructionLoss(
+        l1_weight=config.loss_weights.l1,
+        spectral_weight=config.loss_weights.spectral,
+        edge_weight=config.loss_weights.edge,
+        ssim_weight=config.loss_weights.ssim,
     )
 
 

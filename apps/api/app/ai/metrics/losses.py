@@ -159,6 +159,33 @@ class ReconstructionLoss(nn.Module):
         }
 
 
+class CloudSegmentationLoss(nn.Module):
+    def __init__(self, *, bce_weight: float = 0.7, dice_weight: float = 0.3) -> None:
+        super().__init__()
+        self.bce_weight = bce_weight
+        self.dice_weight = dice_weight
+        self.bce = nn.BCEWithLogitsLoss()
+
+    def forward(
+        self,
+        prediction: torch.Tensor,
+        target: torch.Tensor,
+        mask: torch.Tensor | None = None,
+    ) -> tuple[torch.Tensor, dict[str, float]]:
+        target = target.float()
+        bce = self.bce(prediction, target)
+        probability = torch.sigmoid(prediction)
+        intersection = (probability * target).sum(dim=(1, 2, 3))
+        denominator = probability.sum(dim=(1, 2, 3)) + target.sum(dim=(1, 2, 3))
+        dice = 1 - ((2 * intersection + 1.0) / (denominator + 1.0)).mean()
+        total = self.bce_weight * bce + self.dice_weight * dice
+        return total, {
+            "loss_total": float(total.detach().cpu()),
+            "loss_bce": float(bce.detach().cpu()),
+            "loss_dice": float(dice.detach().cpu()),
+        }
+
+
 def masked_mean(values: torch.Tensor, mask: torch.Tensor | None = None) -> torch.Tensor:
     if mask is None:
         return values.mean()

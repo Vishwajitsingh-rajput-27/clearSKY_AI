@@ -6,10 +6,9 @@ from pathlib import Path
 
 import torch
 
-from app.ai.metrics.losses import ReconstructionLoss
 from app.ai.models.registry import build_model
 from app.ai.training.config import TrainingConfig, load_training_config
-from app.ai.training.train import build_loader, validate
+from app.ai.training.train import build_criterion, build_loader, validate
 
 
 def validate_from_config(
@@ -31,12 +30,7 @@ def validate_from_config(
     payload = torch.load(checkpoint, map_location=device)
     model.load_state_dict(payload.get("model_state_dict", payload))
 
-    criterion = ReconstructionLoss(
-        l1_weight=config.loss_weights.l1,
-        spectral_weight=config.loss_weights.spectral,
-        edge_weight=config.loss_weights.edge,
-        ssim_weight=config.loss_weights.ssim,
-    )
+    criterion = build_criterion(config)
     loader = build_loader(config.val_manifest, config=config, split="val", shuffle=False)
     return validate(model, loader, criterion=criterion, device=device)
 

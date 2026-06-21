@@ -1,0 +1,30 @@
+{
+  "output_dir": "data",
+  "target_count": 100,
+  "image_size": 512,
+  "chip_size_km": 5.12,
+  "start_date": "2022-01-01",
+  "end_date": "2025-12-31",
+  "max_cloud_percent": 10.0,
+  "temporal_min_days": 20,
+  "temporal_max_days": 120,
+  "s1_window_days": 18,
+  "min_mask_percent": 5.0,
+  "max_mask_percent": 70.0,
+  "max_candidates_per_aoi": 8,
+  "download_pause_seconds": 0.5,
+  "skip_existing": true,
+  "seed": 2026,
+  "regions": [
+    { "name": "punjab_agriculture", "lat": 30.7333, "lon": 76.7794 },
+    { "name": "gujarat_coast", "lat": 22.4707, "lon": 70.0577 },
+    { "name": "assam_floodplain", "lat": 26.2006, "lon": 92.9376 },
+    { "name": "karnataka_agriculture", "lat": 12.9141, "lon": 77.2410 },
+    { "name": "rajasthan_drylands", "lat": 26.9124, "lon": 75.7873 },
+    { "name": "uttarakhand_hills", "lat": 30.3165, "lon": 78.0322 },
+    { "name": "odisha_coast", "lat": 20.2961, "lon": 85.8245 },
+    { "name": "telangana_mixed", "lat": 17.3850, "lon": 78.4867 },
+    { "name": "kerala_vegetation", "lat": 10.8505, "lon": 76.2711 },
+    { "name": "maharashtra_urban_agri", "lat": 18.5204, "lon": 73.8567 }
+  ]
+}
