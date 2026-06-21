@@ -30,6 +30,9 @@ def train_all(
     config_paths: dict[str, str],
     device: str | None = None,
     epochs: int | None = None,
+    train_manifest: str | None = None,
+    val_manifest: str | None = None,
+    checkpoint_dir: str | None = None,
     continue_on_error: bool = False,
     validate_best: bool = True,
 ) -> dict[str, Any]:
@@ -45,7 +48,14 @@ def train_all(
         started = time.perf_counter()
         config_path = config_paths[model_name]
         config = load_training_config(config_path)
-        config = apply_overrides(config, device=device, epochs=epochs)
+        config = apply_overrides(
+            config,
+            device=device,
+            epochs=epochs,
+            train_manifest=train_manifest,
+            val_manifest=val_manifest,
+            checkpoint_dir=checkpoint_dir,
+        )
         record: dict[str, Any] = {
             "model_name": model_name,
             "config_path": config_path,
@@ -78,12 +88,21 @@ def apply_overrides(
     *,
     device: str | None,
     epochs: int | None,
+    train_manifest: str | None,
+    val_manifest: str | None,
+    checkpoint_dir: str | None,
 ) -> TrainingConfig:
     updates: dict[str, Any] = {}
     if device:
         updates["device"] = resolve_device(device)
     if epochs is not None:
         updates["epochs"] = epochs
+    if train_manifest:
+        updates["train_manifest"] = train_manifest
+    if val_manifest:
+        updates["val_manifest"] = val_manifest
+    if checkpoint_dir:
+        updates["checkpoint_dir"] = checkpoint_dir
     return replace(config, **updates) if updates else config
 
 
@@ -127,6 +146,9 @@ def main() -> None:
         help="Override every config's device. Use 'auto' to prefer CUDA when available.",
     )
     parser.add_argument("--epochs", type=int, default=None, help="Override epochs for every model.")
+    parser.add_argument("--train-manifest", default=None, help="Override train manifest path.")
+    parser.add_argument("--val-manifest", default=None, help="Override validation manifest path.")
+    parser.add_argument("--checkpoint-dir", default=None, help="Override checkpoint root directory.")
     parser.add_argument(
         "--continue-on-error",
         action="store_true",
@@ -149,6 +171,9 @@ def main() -> None:
         config_paths=DEFAULT_MODEL_CONFIGS,
         device=args.device,
         epochs=args.epochs,
+        train_manifest=args.train_manifest,
+        val_manifest=args.val_manifest,
+        checkpoint_dir=args.checkpoint_dir,
         continue_on_error=args.continue_on_error,
         validate_best=not args.skip_best_validation,
     )

@@ -66,6 +66,16 @@ Keep going if one model fails:
 python -m app.ai.training.train_all --device auto --continue-on-error
 ```
 
+Use Google Drive manifests/checkpoints, as in Colab:
+
+```powershell
+python -m app.ai.training.train_all `
+  --device auto `
+  --train-manifest /content/drive/MyDrive/clearSKY_AI/data/manifests/train.json `
+  --val-manifest /content/drive/MyDrive/clearSKY_AI/data/manifests/val.json `
+  --checkpoint-dir /content/drive/MyDrive/clearSKY_AI/models/checkpoints
+```
+
 ## Individual Commands
 
 ```powershell
