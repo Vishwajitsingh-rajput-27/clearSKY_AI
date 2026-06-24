@@ -30,7 +30,7 @@ def train_from_config(config: TrainingConfig) -> dict[str, float]:
         base_channels=config.base_channels,
     ).to(device)
     optimizer = torch.optim.AdamW(model.parameters(), lr=config.learning_rate, weight_decay=1e-4)
-    criterion = build_criterion(config)
+    criterion = build_criterion(config).to(device)
 
     best_val_loss = float("inf")
     latest_metrics: dict[str, float] = {}
