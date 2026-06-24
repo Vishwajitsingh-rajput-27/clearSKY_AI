@@ -24,6 +24,12 @@ Train all models:
 python -m app.ai.training.train_all --device auto
 ```
 
+For the fastest Colab/demo run across all four models, use the fast profile:
+
+```powershell
+python -m app.ai.training.train_all --profile fast --device auto --skip-best-validation
+```
+
 This trains, in order:
 
 ```text
@@ -51,7 +57,7 @@ apps/api/models/checkpoints/train_all_summary.json
 Before a real long run, test one epoch on all models:
 
 ```powershell
-python -m app.ai.training.train_all --device auto --epochs 1
+python -m app.ai.training.train_all --profile fast --device auto --epochs 1 --skip-best-validation
 ```
 
 Train only selected models:
@@ -70,6 +76,7 @@ Use Google Drive manifests/checkpoints, as in Colab:
 
 ```powershell
 python -m app.ai.training.train_all `
+  --profile fast `
   --device auto `
   --train-manifest /content/drive/MyDrive/clearSKY_AI/data/manifests/train.json `
   --val-manifest /content/drive/MyDrive/clearSKY_AI/data/manifests/val.json `
@@ -92,6 +99,10 @@ apps/api/configs/ai_training.unet_cloud.json
 apps/api/configs/ai_training.attention_unet.json
 apps/api/configs/ai_training.swin_unet.json
 apps/api/configs/ai_training.fusion.json
+apps/api/configs/ai_training.fast.unet_cloud.json
+apps/api/configs/ai_training.fast.attention_unet.json
+apps/api/configs/ai_training.fast.swin_unet.json
+apps/api/configs/ai_training.fast.fusion.json
 ```
 
 ## Notes

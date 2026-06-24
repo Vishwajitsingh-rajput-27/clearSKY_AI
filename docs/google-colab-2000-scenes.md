@@ -3,6 +3,9 @@
 This workflow builds a 2,000-scene fusion dataset and trains all clearSKY AI
 models from Google Colab.
 
+If you need speed and do not need real Earth Engine scenes yet, use the synthetic
+1000-scene path in `docs/fast-1000-scenes.md` first.
+
 ## Colab Runtime
 
 Use:
@@ -89,11 +92,14 @@ Output:
 ```bash
 cd /content/clearSKY_AI/apps/api
 python -m app.ai.training.train_all \
+  --profile fast \
   --device auto \
   --epochs 1 \
   --train-manifest /content/drive/MyDrive/clearSKY_AI/data/manifests/train.json \
   --val-manifest /content/drive/MyDrive/clearSKY_AI/data/manifests/val.json \
-  --checkpoint-dir /content/drive/MyDrive/clearSKY_AI/models/checkpoints
+  --checkpoint-dir /content/drive/MyDrive/clearSKY_AI/models/checkpoints \
+  --summary-path /content/drive/MyDrive/clearSKY_AI/models/checkpoints/train_all_smoke_summary.json \
+  --skip-best-validation
 ```
 
 ### 8. Full All-Model Training
@@ -139,8 +145,9 @@ python -m app.ai.datasets.build_fusion_100 \
 Then:
 
 ```bash
-python -m app.ai.training.train_all --device auto --epochs 1 \
+python -m app.ai.training.train_all --profile fast --device auto --epochs 1 \
   --train-manifest /content/drive/MyDrive/clearSKY_AI/data/manifests/train.json \
   --val-manifest /content/drive/MyDrive/clearSKY_AI/data/manifests/val.json \
-  --checkpoint-dir /content/drive/MyDrive/clearSKY_AI/models/checkpoints
+  --checkpoint-dir /content/drive/MyDrive/clearSKY_AI/models/checkpoints \
+  --skip-best-validation
 ```

@@ -16,6 +16,13 @@ DEFAULT_MODEL_CONFIGS = {
     "multi-sensor-fusion": "configs/ai_training.fusion.json",
 }
 
+FAST_MODEL_CONFIGS = {
+    "unet-cloud-segmentation": "configs/ai_training.fast.unet_cloud.json",
+    "attention-unet": "configs/ai_training.fast.attention_unet.json",
+    "swin-unet": "configs/ai_training.fast.swin_unet.json",
+    "multi-sensor-fusion": "configs/ai_training.fast.fusion.json",
+}
+
 DEFAULT_ORDER = [
     "unet-cloud-segmentation",
     "attention-unet",
@@ -23,11 +30,17 @@ DEFAULT_ORDER = [
     "multi-sensor-fusion",
 ]
 
+PROFILE_CONFIGS = {
+    "full": DEFAULT_MODEL_CONFIGS,
+    "fast": FAST_MODEL_CONFIGS,
+}
+
 
 def train_all(
     *,
     model_names: list[str],
     config_paths: dict[str, str],
+    profile: str = "full",
     device: str | None = None,
     epochs: int | None = None,
     train_manifest: str | None = None,
@@ -41,6 +54,7 @@ def train_all(
 
     results: dict[str, Any] = {
         "started_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "profile": profile,
         "models": [],
     }
 
@@ -140,6 +154,15 @@ def main() -> None:
         ),
     )
     parser.add_argument(
+        "--profile",
+        choices=sorted(PROFILE_CONFIGS),
+        default="full",
+        help=(
+            "Training config profile. Use 'fast' for quick Colab/demo pretraining, "
+            "or 'full' for the heavier default run."
+        ),
+    )
+    parser.add_argument(
         "--device",
         choices=["auto", "cpu", "cuda"],
         default=None,
@@ -166,9 +189,11 @@ def main() -> None:
     )
     args = parser.parse_args()
 
+    config_paths = PROFILE_CONFIGS[args.profile]
     results = train_all(
         model_names=args.models,
-        config_paths=DEFAULT_MODEL_CONFIGS,
+        config_paths=config_paths,
+        profile=args.profile,
         device=args.device,
         epochs=args.epochs,
         train_manifest=args.train_manifest,

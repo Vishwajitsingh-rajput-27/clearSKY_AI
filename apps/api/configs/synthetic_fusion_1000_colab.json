@@ -1,0 +1,11 @@
+{
+  "output_dir": "/content/drive/MyDrive/clearSKY_AI/synthetic_data",
+  "target_count": 1000,
+  "image_size": 512,
+  "train_fraction": 0.8,
+  "val_fraction": 0.1,
+  "min_mask_percent": 5.0,
+  "max_mask_percent": 70.0,
+  "seed": 2026,
+  "skip_existing": true
+}
